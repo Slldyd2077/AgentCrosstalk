@@ -40,7 +40,13 @@ export async function runTalk(host: string, task: string, opts: TalkOptions = {}
   }
 
   const project = opts.project ?? peer.defaultProject;
-  const cmd = buildClaudeCommand({ ...opts, project, claudePath, task });
+  // Headless Claude can't answer permission prompts, so default to bypass —
+  // otherwise any task that touches files/bash hangs. Caller can override.
+  const permissionMode = opts.permissionMode ?? "bypassPermissions";
+  if (!opts.permissionMode) {
+    log.dim("permission-mode: bypassPermissions (default) — the peer's Claude has full tool access.");
+  }
+  const cmd = buildClaudeCommand({ ...opts, permissionMode, project, claudePath, task });
   log.dim(`→ ${peer.user}@${peer.ip}`);
 
   const code = await remote.execStream(cmd);

@@ -70,7 +70,7 @@ program
   .option("--max-turns <n>", "cap on agentic turns", (v) => Number(v))
   .option(
     "--permission-mode <mode>",
-    "default | acceptEdits | plan | bypassPermissions",
+    "default | acceptEdits | plan | bypassPermissions (default: bypassPermissions)",
   )
   .option("--allowed-tools <tools...>", "auto-approve these tool patterns")
   .option("--output-format <fmt>", "text | json | stream-json", "stream-json")
