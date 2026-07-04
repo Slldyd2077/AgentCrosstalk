@@ -1,0 +1,59 @@
+{
+  "name": "agentcrosstalk",
+  "version": "0.1.0",
+  "description": "Agent-to-agent crosstalk across your machines — connect Claude Code across PCs, zero-config, no cloud.",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "mcp",
+    "ssh",
+    "tailscale",
+    "croc",
+    "agent",
+    "cli"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "act": "dist/cli.js",
+    "act-mcp": "dist/mcp-server.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "dev:mcp": "tsx src/mcp-server.ts",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "env-paths": "^3.0.0",
+    "execa": "^9.5.0",
+    "fast-glob": "^3.3.2",
+    "hash-wasm": "^4.12.0",
+    "nanospinner": "^1.1.0",
+    "node-ssh": "^13.1.0",
+    "ssh2": "^1.16.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/ssh2": "^1.15.5",
+    "tsup": "^8.3.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
