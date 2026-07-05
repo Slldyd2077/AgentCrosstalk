@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/logo.png" alt="AgentCrosstalk" width="180"></p>
+
 # AgentCrosstalk (`act`)
 
 > **Agent-to-agent crosstalk, across your machines.**
