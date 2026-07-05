@@ -5,6 +5,12 @@
 
 缩写即寓意：**A**gent **C**ross**T**alk = **ACT**——而 agent 的本质就是 act。
 
+> 🧪 **测试版（Beta）** —— 核心能力（`init` / `peers` / `talk` / `diff` / `send` / `pull` + MCP）已在两台 Windows 真机间端到端跑通，但还属于早期版本：
+> - 主要在 **Windows** 上验证过；macOS/Linux 的 sshd 配置仍是 stub。
+> - SSH / MCP 的集成路径靠**手动真机验证**，没有自动化测试覆盖。
+> - `act pull` 目前只支持**单文件**（整目录迁移待做）；`act talk` 默认 `bypassPermissions`（远程 Claude 拥有完整权限，按需收紧）。
+> - 配置、破坏性变更前请自行确认。欢迎反馈。
+
 ---
 
 ## ✨ 能干什么
@@ -132,6 +138,17 @@ npm run build      # tsup 打包 → dist/cli.js + dist/mcp-server.js
 npm test           # vitest 单测
 npm run typecheck  # tsc --noEmit
 npm run dev -- --version   # tsx 直接跑 CLI
+```
+
+### 版本管理
+
+版本号遵循 `major.minor.patch`（semver），单一来源是 `package.json`（`act --version` 也读它）。`npm version` 会自动同步 `src/version.ts`、提交、打 tag、并重新构建：
+
+```bash
+npm run bump:patch   # 0.1.0 → 0.1.1   （修复）
+npm run bump:minor   # 0.1.0 → 0.2.0   （新功能，向后兼容）
+npm run bump:major   # 0.1.0 → 1.0.0   （破坏性变更）
+git push --follow-tags   # 推 commit + tag
 ```
 
 技术栈：**TypeScript**（ESM / Node 20+），单包双 bin（`act` CLI + `act-mcp`），Commander + ssh2 + fast-glob + zod + `@modelcontextprotocol/sdk`。

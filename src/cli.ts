@@ -14,8 +14,7 @@ import { runSend } from "./commands/send.js";
 import { runPull } from "./commands/pull.js";
 import { setJsonMode } from "./util/log.js";
 import type { TalkOptions } from "./protocol/types.js";
-
-const VERSION = "0.1.0";
+import { VERSION } from "./version.js";
 
 /**
  * The README's natural-language forms `act send <file> to <host>` and

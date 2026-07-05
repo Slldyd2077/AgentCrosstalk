@@ -33,6 +33,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "version": "node scripts/sync-version.mjs && git add src/version.ts",
+    "postversion": "npm run build",
+    "bump:patch": "npm version patch",
+    "bump:minor": "npm version minor",
+    "bump:major": "npm version major",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

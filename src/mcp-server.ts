@@ -21,8 +21,8 @@ import { parseClaudeResult } from "./core/claude-result.js";
 import { listMembers } from "./util/zerotier.js";
 import { buildRemoteHashCommand, compareTrees, hashLocalTree, parseRemoteHashes } from "./core/diff-engine.js";
 import type { Config, Peer, TalkOptions } from "./protocol/types.js";
+import { VERSION } from "./version.js";
 
-const VERSION = "0.1.0";
 const server = new McpServer({ name: "act", version: VERSION });
 
 interface ToolResult {
