@@ -10,7 +10,7 @@
 > 🧪 **测试版（Beta）** —— 核心能力（`init` / `peers` / `talk` / `diff` / `send` / `pull` + MCP）已在两台 Windows 真机间端到端跑通，但还属于早期版本：
 > - 主要在 **Windows** 上验证过；macOS/Linux 的 sshd 配置仍是 stub。
 > - SSH / MCP 的集成路径靠**手动真机验证**，没有自动化测试覆盖。
-> - `act pull` 目前只支持**单文件**（整目录迁移待做）；`act talk` 默认 `bypassPermissions`（远程 Claude 拥有完整权限，按需收紧）。
+> - `act pull` 支持单文件，`act clone` 支持整项目迁移（git 仓库走 git bundle，带历史、自动跳过 node_modules/.env/构建产物）；`act talk` 默认 `bypassPermissions`（远程 Claude 拥有完整权限，按需收紧）。
 > - 配置、破坏性变更前请自行确认。欢迎反馈。
 
 ---
@@ -20,6 +20,7 @@
 - **`act talk`** —— 在 A 一句话，让 B 上的 Claude 干活（headless），结果实时流回 A
 - **`act diff`** —— 对比两台机器上同一个项目的差异（不依赖 git）
 - **`act send` / `act pull`** —— 点对点加密传文件（SFTP over SSH，不经任何云）
+- **`act clone`** —— 整个项目从对端克隆过来（git 仓库走 `git bundle`，带历史、自动跳过 node_modules/.env/构建产物；非 git 目录走 tar）
 - **MCP server + slash 命令** —— 把上面这些接进 Claude Code，用自然语言或 `/talk`、`/diff` 调用
 
 ---
@@ -69,6 +70,7 @@ node dist/cli.js talk desk "列一下你的桌面"   # 指挥另一台的 Claude
 | `act diff <host> [--path <dir>] [--remote-path <dir>]` | 跨机对比项目，列出 added / removed / modified |
 | `act send <file> to <host> [--to <dir>]` | 发文件到对方（落到对方 home 或 `--to`） |
 | `act pull <file> from <host> [--out <dir>]` | 从对方拉文件到本机 |
+| `act clone <host> <path> [--out <dir>] [--no-env]` | 克隆对端整个项目（git 仓库走 git bundle 带历史；非 git 走 tar） |
 
 `<host>` 可以是机器名、ZeroTier IP 或 nodeId，支持模糊匹配（`act talk desk ...` 即可）。
 
@@ -118,7 +120,7 @@ claude mcp add act -- node /绝对路径/dist/mcp-server.js
 - [x] **M4** `act send` / `act pull`（SFTP over SSH）
 - [x] **M5** MCP server + slash 命令（5 工具，Claude 原生调用）
 - [ ] **`act mesh`** 多机 Claude 互联（agent-as-tool）
-- [ ] `act pull <目录>`（整项目迁移，目前需手动打包）
+- [x] `act clone`（整项目迁移：git 仓库走 git bundle 带历史 + 自动跳过 gitignored，非 git 走 tar）
 - [ ] 单文件 `.exe` 分发、安装脚本、首页
 
 ---

@@ -12,6 +12,7 @@ import { runTalk } from "./commands/talk.js";
 import { runDiff } from "./commands/diff.js";
 import { runSend } from "./commands/send.js";
 import { runPull } from "./commands/pull.js";
+import { runClone } from "./commands/clone.js";
 import { setJsonMode } from "./util/log.js";
 import type { TalkOptions } from "./protocol/types.js";
 import { VERSION } from "./version.js";
@@ -119,6 +120,15 @@ program
     const [file, host] = normalizeTransferArgs(rest);
     return runPull(file, host, { out: opts.out });
   });
+
+program
+  .command("clone")
+  .description("Clone a project directory from a peer (git bundle if it's a repo, else tar).")
+  .argument("<host>", "peer name / IP / nodeId")
+  .argument("<path>", "project dir on the peer")
+  .option("-o, --out <dir>", "local dest dir (default: cwd)")
+  .option("--no-env", "do not pull the peer's .env")
+  .action((host: string, remotePath: string, opts) => runClone(host, remotePath, { out: opts.out, noEnv: opts.noEnv }));
 
 program.parseAsync(process.argv).catch((err: unknown) => {
   // commander already prints usage for its own errors; only print unexpected ones.
