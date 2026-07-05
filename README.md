@@ -44,7 +44,7 @@ node dist/cli.js init --zerotier-token <你的token>
 
 ```bash
 node dist/cli.js peers                         # 看看网络里有哪些机器
-node dist/cli.js talk 游戏本 "列一下你的桌面"   # 指挥另一台的 Claude
+node dist/cli.js talk desk "列一下你的桌面"   # 指挥另一台的 Claude（desk = 对方机器名）
 ```
 
 > 两台机器第一次互联时，`act talk` 会提示输一次对方密码来安装本机公钥，之后免密。
@@ -62,7 +62,7 @@ node dist/cli.js talk 游戏本 "列一下你的桌面"   # 指挥另一台的 C
 | `act send <file> to <host> [--to <dir>]` | 发文件到对方（落到对方 home 或 `--to`） |
 | `act pull <file> from <host> [--out <dir>]` | 从对方拉文件到本机 |
 
-`<host>` 可以是机器名、ZeroTier IP 或 nodeId，支持模糊匹配（`act talk 游戏本 ...` 即可）。
+`<host>` 可以是机器名、ZeroTier IP 或 nodeId，支持模糊匹配（`act talk desk ...` 即可）。
 
 ---
 
@@ -74,7 +74,7 @@ claude mcp add act -- node /绝对路径/dist/mcp-server.js
 
 重启 Claude Code 后，`act` 的 5 个工具就可被原生调用：`act_peers` / `act_talk` / `act_diff` / `act_pull` / `act_send`。也可以用 slash 命令：`/peers`、`/talk <host> <任务>`、`/diff <host>`、`/pull <host> <文件>`。
 
-最大好处：**跨机的多步活儿，Claude 自己编排**。比如"把游戏本上的某项目拉过来开发"，Claude 会自动串联 talk→pull→解压，不用你一步步盯。
+最大好处：**跨机的多步活儿，Claude 自己编排**。比如"把 desk 上的某项目拉过来开发"，Claude 会自动串联 talk→pull→解压，不用你一步步盯。
 
 ---
 

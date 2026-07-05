@@ -8,7 +8,7 @@ const FIXTURE = JSON.stringify({
   duration_ms: 11029,
   num_turns: 1,
   result: "hello world",
-  session_id: "94e5794f-137c-46e5-aff9-6c9b863ca684",
+  session_id: "11111111-1111-1111-1111-111111111111",
   total_cost_usd: 0.229977,
   usage: { input_tokens: 45429, output_tokens: 112 },
   permission_denials: [],
@@ -23,7 +23,7 @@ describe("parseClaudeResult", () => {
     expect(s.costUsd).toBeCloseTo(0.23);
     expect(s.inputTokens).toBe(45429);
     expect(s.outputTokens).toBe(112);
-    expect(s.sessionId).toBe("94e5794f-137c-46e5-aff9-6c9b863ca684");
+    expect(s.sessionId).toBe("11111111-1111-1111-1111-111111111111");
     expect(s.permissionDenials).toEqual([]);
   });
 

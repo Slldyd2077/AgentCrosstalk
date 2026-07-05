@@ -3,7 +3,7 @@
  *
  * `findPeer` resolves a user-typed host query (name, IP, or ZeroTier nodeId)
  * against the known peer list — used by `act talk` / `diff` / `pull` so
- * `act talk 游戏本 ...` or `act talk 192.168.196.91 ...` both work.
+ * `act talk desk ...` or `act talk 10.147.17.1 ...` both work.
  */
 import type { Peer } from "../protocol/types.js";
 
