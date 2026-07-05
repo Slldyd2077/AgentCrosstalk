@@ -153,6 +153,18 @@ git push --follow-tags   # 推 commit + tag
 
 技术栈：**TypeScript**（ESM / Node 20+），单包双 bin（`act` CLI + `act-mcp`），Commander + ssh2 + fast-glob + zod + `@modelcontextprotocol/sdk`。
 
+### 分支策略
+
+- **`dev`** 是日常工作分支——新功能、实验、修 bug 都在 dev 上做、勤推送。
+- **`main`** 只放稳定版。dev 上验证 OK 后，再合并到 main 并打 tag 发版：
+
+```bash
+git checkout main && git merge dev && git push   # 本地合并
+# 或在 GitHub 上发 dev → main 的 PR，review 后合并
+npm run bump:patch   # 合完后升版本号 + 打 tag（见上）
+git push --follow-tags
+```
+
 ---
 
 ## 📄 License
