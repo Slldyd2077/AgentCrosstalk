@@ -7,10 +7,11 @@
 
 缩写即寓意：**A**gent **C**ross**T**alk = **ACT**——而 agent 的本质就是 act。
 
-> 🧪 **测试版（Beta）** —— 核心能力（`init` / `peers` / `talk` / `diff` / `send` / `pull` + MCP）已在两台 Windows 真机间端到端跑通，但还属于早期版本：
+> 🧪 **测试版（Beta）** —— 核心能力（`init` / `peers` / `talk` / `diff` / `send` / `pull` / `clone` / `status` + MCP）已在三台 Windows 真机（含阿里云 ECS）间端到端跑通，但还属于早期版本：
 > - 主要在 **Windows** 上验证过；macOS/Linux 的 sshd 配置仍是 stub。
 > - SSH / MCP 的集成路径靠**手动真机验证**，没有自动化测试覆盖。
-> - `act pull` 支持单文件，`act clone` 支持整项目迁移（git 仓库走 git bundle，带历史、自动跳过 node_modules/.env/构建产物）；`act talk` 默认 `bypassPermissions`（远程 Claude 拥有完整权限，按需收紧）。
+> - `act pull` 支持单文件，`act clone` 支持整项目迁移，`act status` 看远程 Claude 在干啥；`act clone`/`status` 目前只支持 **Windows 对端**（PowerShell）。
+> - `act talk` 默认 `bypassPermissions`（远程 Claude 拥有完整权限，按需收紧）。
 > - 配置、破坏性变更前请自行确认。欢迎反馈。
 
 ---
@@ -113,7 +114,7 @@ claude mcp add act -- node /绝对路径/dist/mcp-server.js
 
 ## 🗺 路线图与状态
 
-🎉 **MVP 完成**，A↔B 两台真机端到端验证通过。
+🎉 **v0.4.0** —— MVP + 进阶功能完成，三台 Windows 真机（含阿里云 ECS）端到端跑通。
 
 - [x] **M0** 脚手架 + 构建链（CLI / MCP 双 bin、tsup、单测）
 - [x] **M1** `act init` + `act peers`（ZeroTier Central API 发现）
@@ -123,6 +124,7 @@ claude mcp add act -- node /绝对路径/dist/mcp-server.js
 - [x] **M5** MCP server + slash 命令（5 工具，Claude 原生调用）
 - [ ] **`act mesh`** 多机 Claude 互联（agent-as-tool）
 - [x] `act clone`（整项目迁移：git 仓库走 git bundle 带历史 + 自动跳过 gitignored，非 git 走 tar）
+- [x] `act status`（看对方 Claude 现在在干啥；`--watch` 实时刷新）
 - [ ] 单文件 `.exe` 分发、安装脚本、首页
 
 ---
