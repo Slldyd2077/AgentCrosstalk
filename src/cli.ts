@@ -13,6 +13,7 @@ import { runDiff } from "./commands/diff.js";
 import { runSend } from "./commands/send.js";
 import { runPull } from "./commands/pull.js";
 import { runClone } from "./commands/clone.js";
+import { runStatus } from "./commands/status.js";
 import { setJsonMode } from "./util/log.js";
 import type { TalkOptions } from "./protocol/types.js";
 import { VERSION } from "./version.js";
@@ -129,6 +130,14 @@ program
   .option("-o, --out <dir>", "local dest dir (default: cwd)")
   .option("--no-env", "do not pull the peer's .env")
   .action((host: string, remotePath: string, opts) => runClone(host, remotePath, { out: opts.out, noEnv: opts.noEnv }));
+
+program
+  .command("status")
+  .description("See what the peer's Claude Code is doing right now (project + recent activity).")
+  .argument("<host>", "peer name / IP / nodeId")
+  .option("-w, --watch", "refresh every 5s (tail -f style)")
+  .option("-n, --lines <n>", "number of recent activity lines (default 25)", (v) => Number(v))
+  .action((host: string, opts) => runStatus(host, { watch: Boolean(opts.watch), lines: opts.lines }));
 
 program.parseAsync(process.argv).catch((err: unknown) => {
   // commander already prints usage for its own errors; only print unexpected ones.

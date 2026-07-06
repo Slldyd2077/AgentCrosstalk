@@ -21,6 +21,7 @@
 - **`act diff`** —— 对比两台机器上同一个项目的差异（不依赖 git）
 - **`act send` / `act pull`** —— 点对点加密传文件（SFTP over SSH，不经任何云）
 - **`act clone`** —— 整个项目从对端克隆过来（git 仓库走 `git bundle`，带历史、自动跳过 node_modules/.env/构建产物；非 git 目录走 tar）
+- **`act status`** —— 看另一台机器的 Claude 此刻在干啥（最近会话活动；`--watch` 实时刷新）
 - **MCP server + slash 命令** —— 把上面这些接进 Claude Code，用自然语言或 `/talk`、`/diff` 调用
 
 ---
@@ -71,6 +72,7 @@ node dist/cli.js talk desk "列一下你的桌面"   # 指挥另一台的 Claude
 | `act send <file> to <host> [--to <dir>]` | 发文件到对方（落到对方 home 或 `--to`） |
 | `act pull <file> from <host> [--out <dir>]` | 从对方拉文件到本机 |
 | `act clone <host> <path> [--out <dir>] [--no-env]` | 克隆对端整个项目（git 仓库走 git bundle 带历史；非 git 走 tar） |
+| `act status <host> [-w\|--watch] [-n <n>]` | 看对方 Claude 现在在干啥（读最新会话记录；`--watch` 每 5 秒刷新） |
 
 `<host>` 可以是机器名、ZeroTier IP 或 nodeId，支持模糊匹配（`act talk desk ...` 即可）。
 
