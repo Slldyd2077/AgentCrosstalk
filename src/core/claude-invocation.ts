@@ -16,6 +16,8 @@ export interface ClaudeCommandOptions extends TalkOptions {
   claudePath: string;
   /** The task to run. */
   task: string;
+  /** Resume a prior headless session on the peer (`claude --resume <id>`) — continues that conversation with full context. */
+  resumeSessionId?: string;
 }
 
 /** Wrap a string as a PowerShell single-quoted literal (doubles embedded quotes). */
@@ -39,6 +41,9 @@ export function buildClaudeCommand(opts: ClaudeCommandOptions): string {
   if (opts.permissionMode) args.push("--permission-mode", psSingleQuote(opts.permissionMode));
   if (opts.allowedTools && opts.allowedTools.length > 0) {
     args.push("--allowedTools", psSingleQuote(opts.allowedTools.join(",")));
+  }
+  if (opts.resumeSessionId) {
+    args.push("--resume", psSingleQuote(opts.resumeSessionId));
   }
 
   // `&` (call operator) handles quoted paths and bare names alike.

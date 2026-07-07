@@ -14,6 +14,7 @@ import { runSend } from "./commands/send.js";
 import { runPull } from "./commands/pull.js";
 import { runClone } from "./commands/clone.js";
 import { runStatus } from "./commands/status.js";
+import { runMesh, runMeshList } from "./commands/mesh.js";
 import { setJsonMode } from "./util/log.js";
 import type { TalkOptions } from "./protocol/types.js";
 import { VERSION } from "./version.js";
@@ -138,6 +139,31 @@ program
   .option("-w, --watch", "refresh every 5s (tail -f style)")
   .option("-n, --lines <n>", "number of recent activity lines (default 25)", (v) => Number(v))
   .action((host: string, opts) => runStatus(host, { watch: Boolean(opts.watch), lines: opts.lines }));
+
+program
+  .command("mesh")
+  .description("Persistent conversation thread with a peer's Claude — remembers context across messages.")
+  .argument("[host]", "peer name / IP / nodeId (omit with --list)")
+  .argument("[message...]", "your message to the peer's Claude")
+  .option("-p, --project <path>", "project dir on the host")
+  .option("-t, --thread <label>", "conversation thread label (default: \"default\") — lets you run multiple independent threads with the same peer")
+  .option("--new", "start a fresh thread, discarding any prior context")
+  .option("--list", "list all open mesh threads across peers")
+  .option("--max-turns <n>", "cap on agentic turns for this message", (v) => Number(v))
+  .option("--allowed-tools <tools...>", "auto-approve these tool patterns")
+  .action((host: string | undefined, messageParts: string[], opts) => {
+    if (opts.list) return runMeshList();
+    if (!host || messageParts.length === 0) {
+      throw new Error('Usage: act mesh <host> "<message>" (or `act mesh --list`)');
+    }
+    return runMesh(host, messageParts.join(" "), {
+      project: opts.project,
+      thread: opts.thread,
+      new: opts.new,
+      maxTurns: opts.maxTurns,
+      allowedTools: opts.allowedTools,
+    });
+  });
 
 program.parseAsync(process.argv).catch((err: unknown) => {
   // commander already prints usage for its own errors; only print unexpected ones.

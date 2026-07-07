@@ -48,4 +48,14 @@ describe("buildClaudeCommand", () => {
     const cmd = buildClaudeCommand({ claudePath: "C:\\Program Files\\claude.cmd", task: "x" });
     expect(cmd).toContain("& 'C:\\Program Files\\claude.cmd'");
   });
+
+  it("adds --resume when a session id is given", () => {
+    const cmd = buildClaudeCommand({ claudePath: "claude", task: "continue", resumeSessionId: "abc-123" });
+    expect(cmd).toContain("--resume 'abc-123'");
+  });
+
+  it("omits --resume when no session id is given", () => {
+    const cmd = buildClaudeCommand({ claudePath: "claude", task: "x" });
+    expect(cmd).not.toContain("--resume");
+  });
 });

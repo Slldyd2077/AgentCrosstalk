@@ -7,7 +7,7 @@
 
 缩写即寓意：**A**gent **C**ross**T**alk = **ACT**——而 agent 的本质就是 act。
 
-> 🧪 **测试版（Beta）** —— 核心能力（`init` / `peers` / `talk` / `diff` / `send` / `pull` / `clone` / `status` + MCP）已在三台 Windows 真机（含阿里云 ECS）间端到端跑通，但还属于早期版本：
+> 🧪 **测试版（Beta）** —— 核心能力（`init` / `peers` / `talk` / `diff` / `send` / `pull` / `clone` / `status` / `mesh` + MCP）已在三台 Windows 真机（含阿里云 ECS）间端到端跑通，但还属于早期版本：
 > - 主要在 **Windows** 上验证过；macOS/Linux 的 sshd 配置仍是 stub。
 > - SSH / MCP 的集成路径靠**手动真机验证**，没有自动化测试覆盖。
 > - `act pull` 支持单文件，`act clone` 支持整项目迁移，`act status` 看远程 Claude 在干啥；`act clone`/`status` 目前只支持 **Windows 对端**（PowerShell）。
@@ -23,6 +23,7 @@
 - **`act send` / `act pull`** —— 点对点加密传文件（SFTP over SSH，不经任何云）
 - **`act clone`** —— 整个项目从对端克隆过来（git 仓库走 `git bundle`，带历史、自动跳过 node_modules/.env/构建产物；非 git 目录走 tar）
 - **`act status`** —— 看另一台机器的 Claude 此刻在干啥（最近会话活动；`--watch` 实时刷新）
+- **`act mesh`** —— 和对端 Claude 保持**持续对话**（不是一次性任务）：靠 `--resume` 记住上一轮的 session，之后每条消息对方都带着完整上下文，不用重新解释项目背景
 - **MCP server + slash 命令** —— 把上面这些接进 Claude Code，用自然语言或 `/talk`、`/diff` 调用
 
 ---
@@ -74,8 +75,12 @@ node dist/cli.js talk desk "列一下你的桌面"   # 指挥另一台的 Claude
 | `act pull <file> from <host> [--out <dir>]` | 从对方拉文件到本机 |
 | `act clone <host> <path> [--out <dir>] [--no-env]` | 克隆对端整个项目（git 仓库走 git bundle 带历史；非 git 走 tar） |
 | `act status <host> [-w\|--watch] [-n <n>]` | 看对方 Claude 现在在干啥（读最新会话记录；`--watch` 每 5 秒刷新） |
+| `act mesh <host> "<消息>" [-t/--thread <label>] [--new]` | 和对方 Claude 持续对话，自动续接上一轮 session；`--thread` 开独立话题，`--new` 另起一段 |
+| `act mesh --list` | 列出所有打开的对话线程（跨所有 peer） |
 
 `<host>` 可以是机器名、ZeroTier IP 或 nodeId，支持模糊匹配（`act talk desk ...` 即可）。
+
+> `act mesh` 的持续记忆靠 Claude Code 自身的 `--resume`（每个 peer+thread 对应一个 session id，存在本地 `sessions.json`）。如果对端装了 ECC 之类会自动把"上次会话摘要"注入新会话的插件，即使开一个全新 thread，对方也可能带着一点残留印象——这是对端的会话管理行为，不是 act 的 thread 隔离出了问题。
 
 ---
 
@@ -114,7 +119,7 @@ claude mcp add act -- node /绝对路径/dist/mcp-server.js
 
 ## 🗺 路线图与状态
 
-🎉 **v0.4.0** —— MVP + 进阶功能完成，三台 Windows 真机（含阿里云 ECS）端到端跑通。
+🎉 **v0.5.0** —— MVP + 进阶功能完成，三台 Windows 真机（含阿里云 ECS）端到端跑通。
 
 - [x] **M0** 脚手架 + 构建链（CLI / MCP 双 bin、tsup、单测）
 - [x] **M1** `act init` + `act peers`（ZeroTier Central API 发现）
@@ -122,9 +127,10 @@ claude mcp add act -- node /绝对路径/dist/mcp-server.js
 - [x] **M3** `act diff`（跨机项目对比）
 - [x] **M4** `act send` / `act pull`（SFTP over SSH）
 - [x] **M5** MCP server + slash 命令（5 工具，Claude 原生调用）
-- [ ] **`act mesh`** 多机 Claude 互联（agent-as-tool）
 - [x] `act clone`（整项目迁移：git 仓库走 git bundle 带历史 + 自动跳过 gitignored，非 git 走 tar）
 - [x] `act status`（看对方 Claude 现在在干啥；`--watch` 实时刷新）
+- [x] **`act mesh`**（持续对话线程：`--resume` 记住上一轮 session，多线程隔离，`--list` 查看所有线程）
+- [ ] `act mesh` 的 MCP 工具化 + slash 命令
 - [ ] 单文件 `.exe` 分发、安装脚本、首页
 
 ---
