@@ -1,6 +1,6 @@
 {
   "name": "agentcrosstalk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Agent-to-agent crosstalk across your machines — connect Claude Code across PCs, zero-config, no cloud.",
   "keywords": [
     "claude",
